@@ -20,27 +20,25 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-	form  = UploadForm()
 	if request.method == 'POST':
 		file = request.files['file']
+		dimensions = int(request.form['dimensions'])
 		selectedBg = request.form['background']
-		print selectedBg
 		if file and allowed_file(file.filename):
 			filename = secure_filename(file.filename)
 			f = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 			file.save(f)
 			with Image.open(f) as img:
-				print img
 				origHeight = img.size[1]
 				origWidth = img.size[0]
-				newHeight = int((float(origHeight)*float(500/float(origWidth))))
-				img = img.resize((500, newHeight), PIL.Image.ANTIALIAS)
+				newHeight = int((float(origHeight)*float(dimensions/float(origWidth))))
+				img = img.resize((dimensions, newHeight), PIL.Image.ANTIALIAS)
 				#Resized
 				if selectedBg != "none":
 					if selectedBg == "white":
-						bg = Image.new(img.mode, (500,500),  (255, 255, 255, 255))
+						bg = Image.new(img.mode, (dimensions, dimensions),  (255, 255, 255, 255))
 					else:
-						bg = Image.new(img.mode, (500,500), (0,0,0,0))
+						bg = Image.new(img.mode, (dimensions, dimensions), (0,0,0,0))
 					bg.paste(img,(0,0))
 					newf = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 					bg.save(newf)
