@@ -8,8 +8,8 @@ class ImageTable(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    heading = db.Column(db.String, nullable=False)
-    priority = db.Column(db.String, nullable=False)
+    heading = db.Column(db.Integer, nullable=False)
+    priority = db.Column(db.Integer, nullable=False)
     imagelink = db.Column(db.String, nullable=False)
 
     def __init__(self, name, heading, priority, imagelink):
