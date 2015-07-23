@@ -36,7 +36,6 @@ def add():
 		if file and allowed_file(file.filename):
 			filename = secure_filename(file.filename)
 			f = os.path.join(app.static_folder, 'img/' + filename)
-			print f
 			file.save(f)
 			with Image.open(f) as img:
 				origHeight = img.size[1]
@@ -58,7 +57,7 @@ def add():
 					newf = os.path.join(app.static_folder, 'img/' + filename)
 					img.save(newf)
 				print newf
-				qry = ImageTable(img.name, heading, priority, newf)
+				qry = ImageTable(file.filename, heading, priority, newf)
 				db.session.add(qry)
 				db.session.commit()
 			return redirect(url_for('uploaded_file', filename=filename))
@@ -72,8 +71,13 @@ def home():
 	advanced = ImageTable.query.filter_by(heading = 3).order_by(ImageTable.priority).all()
 	expert = ImageTable.query.filter_by(heading = 4).order_by(ImageTable.priority).all()
 	for i in xrange(len(amateur)):
-		amateur[i].imagelink = url_for(app.static_folder + '/img/' + amateur[i].name)
-		print amateur[i].imagelink
+		amateur[i].imagelink = '/' +amateur[i].name
+	for i in xrange(len(novice)):
+		novice[i].imagelink = '/' +novice[i].name
+	for i in xrange(len(advanced)):
+		advanced[i].imagelink = '/' +advanced[i].name
+	for i in xrange(len(expert)):
+		expert[i].imagelink = '/' +expert[i].name
 	return render_template("view.html", amateur=amateur, novice=novice, advanced=advanced, expert=expert)
 
 

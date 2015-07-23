@@ -5,6 +5,28 @@
         <title>View Images</title>
     </head>
     <body>
-        <img src="{{ amateur[0].imagelink }}"></img>
+        {% for image in amateur %}
+            <div>{{ image.heading }} -> {{ image.priority }}
+                <img src="{{ image.imagelink }}"></img>
+            </div>
+        {% endfor %}
+        <br<
+        {% for image in novice %}
+            <div>{{ image.heading }} -> {{ image.priority }}
+                <img src="{{ image.imagelink }}"></img>
+            </div>
+        {% endfor %}
+        <br>
+        {% for image in advanced %}
+            <div>{{ image.heading }} -> {{ image.priority }}
+                <img src="{{ image.imagelink }}"></img>
+            </div>
+        {% endfor %}
+        <br>
+        {% for image in expert %}
+            <div>{{ image.heading }} -> {{ image.priority }}
+                <img src="{{ image.imagelink }}"></img>
+            </div>
+        {% endfor %}
     </body>
 </html>
