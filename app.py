@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from flask import Flask, send_from_directory,render_template, url_for, redirect, request
+from flask import Flask, jsonify, send_from_directory,render_template, url_for, redirect, request
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug import secure_filename
 from PIL import Image
@@ -59,7 +59,23 @@ def add():
 				db.session.add(qry)
 				db.session.commit()
 			return redirect(url_for('uploaded_file', filename=filename))
-	return render_template('imageform.html')
+	headings = HPTable.query.all()
+	print headings
+	return render_template('imageform.html', headings=headings)
+
+
+@app.route('/new', methods=['GET', 'POST'])
+def new():
+	print "Here"
+	if request.method == 'POST':
+		receivedHeading = request.json["heading"]
+		print receivedHeading
+		receivedPriority = request.json["priority"]
+		print receivedPriority
+		db.session.add(HPTable(str(receivedHeading), int(receivedPriority)))
+		db.session.commit()
+		return jsonify(heading=receivedHeading, priority=receivedPriority)
+
 
 
 @app.route('/')

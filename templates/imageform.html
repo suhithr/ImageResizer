@@ -1,6 +1,13 @@
 <!doctype html>
 <html>
 <head>
+	<script type='text/javascript'>
+		//sets the global variable to the prefix to the root of the application
+		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+	</script>
+	<script>window.jQuery || document.write('<script src="{{
+	url_for('static', filename='jquery-1.11.3.min.js') }}">\x3C/script>')</script>
+	<script src="{{ url_for('static', filename='add.js') }}"></script>
 	<title>Image Uploader</title>
 </head>
 <body>
@@ -16,12 +23,20 @@
 		<br>
 		<br>
 		<label for="heading">Heading: </label>
-		<select name="heading">
-			<option value="1">Amateur</option>
-			<option value="2">Novice</option>
-			<option value="3">Advanced</option>
-			<option value="4">Expert</option>
-		</select>
+		<input list="heading" name="heading">
+		<datalist id="heading">
+			{% for heading in headings %}
+				<option value="{{ heading.headingpriority}}">{{ heading.heading }}</option>
+			{% endfor %}
+		</datalist>
+		<label for="newoption">New Heading</label>
+		<input type="checkbox" name="newoption" id="newoption"></input>
+		<br>
+		<label for="newname" class="newname" hidden>Enter the New Heading and the Priority of It</label>
+		<br>
+		<input class="newname" id='newname' name="newname" type='text' hidden></input><br>
+		<input min=1 type="number" class="newname" id="newpriority" hidden></input>
+		<button class="newname" hidden>Submit New Heading</button>
 		<br>
 		<br>
 		<label for="priority">Priority:</label>

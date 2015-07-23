@@ -20,3 +20,13 @@ class ImageTable(db.Model):
 
     def __repr__(self):
         return '<Name is %s>' % self.name
+
+class HPTable(db.Model):
+    __tablename__ = 'hptable'
+
+    heading = db.Column(db.String, nullable=False, primary_key=True)
+    headingpriority = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, heading, headingpriority):
+        self.heading = heading
+        self.headingpriority = headingpriority
