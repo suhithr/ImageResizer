@@ -51,12 +51,10 @@ def add():
 					heightPosition = float(dimensions - newHeight) * 0.5
 					bg.paste(img,(0,int(heightPosition)))
 					newf = os.path.join(app.static_folder, 'img/' + filename)
-					print newf
 					bg.save(newf)
 				else:
 					newf = os.path.join(app.static_folder, 'img/' + filename)
 					img.save(newf)
-				print newf
 				qry = ImageTable(file.filename, heading, priority, newf)
 				db.session.add(qry)
 				db.session.commit()
@@ -66,19 +64,12 @@ def add():
 
 @app.route('/')
 def home():
-	amateur = ImageTable.query.filter_by(heading = 1).order_by(ImageTable.priority).all()
-	novice = ImageTable.query.filter_by(heading = 2).order_by(ImageTable.priority).all()
-	advanced = ImageTable.query.filter_by(heading = 3).order_by(ImageTable.priority).all()
-	expert = ImageTable.query.filter_by(heading = 4).order_by(ImageTable.priority).all()
-	for i in xrange(len(amateur)):
-		amateur[i].imagelink = '/' +amateur[i].name
-	for i in xrange(len(novice)):
-		novice[i].imagelink = '/' +novice[i].name
-	for i in xrange(len(advanced)):
-		advanced[i].imagelink = '/' +advanced[i].name
-	for i in xrange(len(expert)):
-		expert[i].imagelink = '/' +expert[i].name
-	return render_template("view.html", amateur=amateur, novice=novice, advanced=advanced, expert=expert)
+	levels = []
+	levels = ImageTable.query.order_by(ImageTable.heading.desc(),ImageTable.priority.desc()).all()
+	for i in xrange(len(levels)):
+		levels[i].imagelink = '/' +levels[i].name
+
+	return render_template("view.html", levels=levels)
 
 
 @app.route('/<filename>')

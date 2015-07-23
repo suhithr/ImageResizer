@@ -3,30 +3,36 @@
     <head>
         <meta charset="utf-8">
         <title>View Images</title>
+        <style>
+            .image {
+                border: 1.5px solid black;
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
-        {% for image in amateur %}
-            <div>{{ image.heading }} -> {{ image.priority }}
-                <img src="{{ image.imagelink }}"></img>
+            <div class="imageSet">
+                <br>
+                {% for image in levels %}
+                <div class="image">
+                    <h3>
+                        {% if image.heading  == 1 %}
+                            Amateur
+                        {% elif image.heading == 2 %}
+                            Novice
+                        {% elif image.heading == 3 %}
+                            Advanced
+                        {% elif image.heading == 4 %}
+                            Expert
+                        {% endif %}
+                    </h3>
+                    <b>{{ image.name }}</b>
+                    <br>
+                    Priority is {{ image.priority }}
+                    <img src="{{ image.imagelink }}"></img>
+                </div>
+                <br>
+            {% endfor %}
             </div>
-        {% endfor %}
-        <br<
-        {% for image in novice %}
-            <div>{{ image.heading }} -> {{ image.priority }}
-                <img src="{{ image.imagelink }}"></img>
-            </div>
-        {% endfor %}
-        <br>
-        {% for image in advanced %}
-            <div>{{ image.heading }} -> {{ image.priority }}
-                <img src="{{ image.imagelink }}"></img>
-            </div>
-        {% endfor %}
-        <br>
-        {% for image in expert %}
-            <div>{{ image.heading }} -> {{ image.priority }}
-                <img src="{{ image.imagelink }}"></img>
-            </div>
-        {% endfor %}
     </body>
 </html>
