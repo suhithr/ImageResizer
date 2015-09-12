@@ -13,6 +13,7 @@
     <body>
             <div class="imageSet">
                 <br>
+                <!--
                 {% for image in levels %}
                 <div class="image">
                     <h3>
@@ -32,7 +33,14 @@
                     <img src="{{ image.imagelink }}"></img>
                 </div>
                 <br>
-            {% endfor %}
+            {% endfor %}-->
+                <div class="image">
+                {% for image in images %}
+                <h3>{{ image.name }}</h3>
+                    <img src="{{ image.imagelink }}"></img>
+                {% endfor %}
+                </div>
+
             </div>
     </body>
 </html>

@@ -77,7 +77,9 @@ def new():
 
 @app.route('/')
 def home():
-	return render_template("view.html")
+	images = []
+	images = ImageTable.query.all()
+	return render_template("view.html", images=images)
 	'''	
 	levels = []
 	levels = ImageTable.query.order_by(ImageTable.heading.desc(),ImageTable.priority.desc()).all()
