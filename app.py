@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config.from_object('config.DevelopmentConfig')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png'])
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'gif'])
 
 db = SQLAlchemy(app)
 
@@ -31,8 +31,6 @@ def add():
 		file = request.files['file']
 		dimensions = app.config['DIMENSIONS']
 		selectedBg = request.form['background']
-		heading = request.form['heading']
-		priority = request.form['priority']
 		if file and allowed_file(file.filename):
 			filename = secure_filename(file.filename)
 			f = os.path.join(app.static_folder, 'img/' + filename)
@@ -55,15 +53,14 @@ def add():
 				else:
 					newf = os.path.join(app.static_folder, 'img/' + filename)
 					img.save(newf)
-				qry = ImageTable(file.filename, heading, priority, newf)
+				qry = ImageTable(file.filename, newf)
 				db.session.add(qry)
 				db.session.commit()
 			return redirect(url_for('uploaded_file', filename=filename))
-	headings = HPTable.query.all()
-	print headings
-	return render_template('imageform.html', headings=headings)
+	#deleted line, headings=headings
+	return render_template('imageform.html')
 
-
+'''
 @app.route('/new', methods=['GET', 'POST'])
 def new():
 	print "Here"
@@ -75,17 +72,19 @@ def new():
 		db.session.add(HPTable(str(receivedHeading), int(receivedPriority)))
 		db.session.commit()
 		return jsonify(heading=receivedHeading, priority=receivedPriority)
-
+'''
 
 
 @app.route('/')
 def home():
+	return render_template("view.html")
+	'''	
 	levels = []
 	levels = ImageTable.query.order_by(ImageTable.heading.desc(),ImageTable.priority.desc()).all()
 	for i in xrange(len(levels)):
-		levels[i].imagelink = '/' +levels[i].name
-
-	return render_template("view.html", levels=levels)
+		levels[i].imagelink = '/' +levels[i].name'''
+		#deleted a levels = levels in the render_template function
+	
 
 
 @app.route('/<filename>')
