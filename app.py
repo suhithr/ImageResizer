@@ -28,35 +28,37 @@ def allowed_file(filename):
 @app.route('/add', methods=['GET', 'POST'])
 def add():
 	if request.method == 'POST':
-		file = request.files['file']
-		dimensions = app.config['DIMENSIONS']
-		selectedBg = request.form['background']
-		if file and allowed_file(file.filename):
-			filename = secure_filename(file.filename)
-			f = os.path.join(app.static_folder, 'img/' + filename)
-			file.save(f)
-			with Image.open(f) as img:
-				origHeight = img.size[1]
-				origWidth = img.size[0]
-				#Resize main image
-				newHeight = int((float(origHeight)*float(dimensions/float(origWidth))))
-				img = img.resize((dimensions, newHeight), PIL.Image.ANTIALIAS)
-				if selectedBg != "none":
-					if selectedBg == "white":
-						bg = Image.new(img.mode, (dimensions, dimensions),  (255, 255, 255, 255))
+		dimensions = request.form['dimensions']
+		if dimensions in ["150", "200", "250", "300"]:	
+			file = request.files['file']
+			dimensions = float(dimensions)
+			selectedBg = request.form['background']
+			if file and allowed_file(file.filename):
+				filename = secure_filename(file.filename)
+				f = os.path.join(app.static_folder, 'img/' + filename)
+				file.save(f)
+				with Image.open(f) as img:
+					origHeight = img.size[1]
+					origWidth = img.size[0]
+					#Resize main image
+					newHeight = int((float(origHeight)*float(dimensions/float(origWidth))))
+					img = img.resize((int(dimensions), newHeight), PIL.Image.ANTIALIAS)
+					if selectedBg != "none":
+						if selectedBg == "white":
+							bg = Image.new(img.mode, (int(dimensions), int(dimensions)),  (255, 255, 255, 255))
+						else:
+							bg = Image.new(img.mode, (int(dimensions), int(dimensions)), (0,0,0,0))
+						heightPosition = float(dimensions - newHeight) * 0.5
+						bg.paste(img,(0,int(heightPosition)))
+						newf = os.path.join(app.static_folder, 'img/' + filename)
+						bg.save(newf)
 					else:
-						bg = Image.new(img.mode, (dimensions, dimensions), (0,0,0,0))
-					heightPosition = float(dimensions - newHeight) * 0.5
-					bg.paste(img,(0,int(heightPosition)))
-					newf = os.path.join(app.static_folder, 'img/' + filename)
-					bg.save(newf)
-				else:
-					newf = os.path.join(app.static_folder, 'img/' + filename)
-					img.save(newf)
-				qry = ImageTable(file.filename, newf)
-				db.session.add(qry)
-				db.session.commit()
-			return redirect(url_for('uploaded_file', filename=filename))
+						newf = os.path.join(app.static_folder, 'img/' + filename)
+						img.save(newf)
+					qry = ImageTable(file.filename, 'img/' + filename)
+					db.session.add(qry)
+					db.session.commit()
+				return redirect(url_for('uploaded_file', filename=filename))
 	#deleted line, headings=headings
 	return render_template('imageform.html')
 

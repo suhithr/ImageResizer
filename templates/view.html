@@ -37,7 +37,7 @@
                 <div class="image">
                 {% for image in images %}
                 <h3>{{ image.name }}</h3>
-                    <img src="{{ image.imagelink }}"></img>
+                    <img src="{{ url_for('static', filename=image.imagelink) }}"></img>
                 {% endfor %}
                 </div>
 
