@@ -29,7 +29,7 @@ def allowed_file(filename):
 def add():
 	if request.method == 'POST':
 		dimensions = request.form['dimensions']
-		if dimensions in ["150", "200", "250", "300"]:	
+		if dimensions in ["270", "300", "375"]:	
 			file = request.files['file']
 			dimensions = float(dimensions)
 			selectedBg = request.form['background']
